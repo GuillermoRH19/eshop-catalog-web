@@ -1,5 +1,4 @@
 import axios from 'axios'
-import type { Product } from './productApi'
 
 const API_BASE = import.meta.env.VITE_BASKET_API_URL || 'https://eshop-basket-api-dnu0.onrender.com'
 

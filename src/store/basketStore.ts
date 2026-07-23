@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { getBasket, storeBasket, deleteBasket, type ShoppingCartItem, type ShoppingCart } from '../api/basketApi'
+import { getBasket, storeBasket, deleteBasket, type ShoppingCart } from '../api/basketApi'
 import type { Product } from '../api/productApi'
 
 export const useBasketStore = defineStore('basket', () => {
