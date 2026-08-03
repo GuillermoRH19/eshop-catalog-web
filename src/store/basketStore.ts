@@ -3,13 +3,24 @@ import { ref, computed } from 'vue'
 import { getBasket, storeBasket, deleteBasket, type ShoppingCart } from '../api/basketApi'
 import type { Product } from '../api/productApi'
 
+// Identifica el carrito del visitante entre sesiones (Basket.API indexa por userName).
+function getOrCreateUserName(): string {
+  const STORAGE_KEY = 'eshop_username'
+  let userName = localStorage.getItem(STORAGE_KEY)
+  if (!userName) {
+    userName = `guest-${crypto.randomUUID()}`
+    localStorage.setItem(STORAGE_KEY, userName)
+  }
+  return userName
+}
+
 export const useBasketStore = defineStore('basket', () => {
   // State
   const cart = ref<ShoppingCart>({
-    userName: 'default-user',
+    userName: getOrCreateUserName(),
     items: []
   })
-  
+
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -18,20 +29,35 @@ export const useBasketStore = defineStore('basket', () => {
   const cartTotal = computed(() => cart.value.items.reduce((total, item) => total + (item.price * item.quantity), 0))
   const itemsCount = computed(() => cart.value.items.reduce((count, item) => count + item.quantity, 0))
 
+  // Sincroniza el carrito actual con el backend. No lanza: solo reporta el error,
+  // porque el estado local (ya actualizado de forma optimista) es la fuente de
+  // verdad para la UI mientras el backend esté lento o caído.
+  async function syncCart() {
+    try {
+      await storeBasket({ cart: cart.value })
+      error.value = null
+    } catch (e: any) {
+      console.error('[basketStore] No se pudo sincronizar el carrito con Basket.API:', e)
+      error.value = 'No se pudo sincronizar el carrito con el servidor. Tus cambios se guardaron localmente.'
+    }
+  }
+
   // Actions
   async function fetchBasket() {
     loading.value = true
     error.value = null
     try {
       const response = await getBasket(cart.value.userName)
-      // Si el carrito no existe en backend (error 404), la API devolverá un error. 
-      // Por ende, solo actualizamos si hay éxito y viene cart.
       if (response.data && response.data.cart) {
         cart.value = response.data.cart
       }
     } catch (e: any) {
-      if (e.response?.status !== 404) {
-        error.value = 'No se pudo obtener el carrito'
+      if (e.response?.status === 404) {
+        // Carrito nuevo: no es un error, simplemente no existe todavía en el backend.
+        console.log('[basketStore] Carrito no encontrado en backend (usuario nuevo), se usará uno vacío.')
+      } else {
+        console.error('[basketStore] Error obteniendo el carrito:', e)
+        error.value = 'No se pudo obtener el carrito desde el servidor. Mostrando carrito local.'
       }
     } finally {
       loading.value = false
@@ -39,81 +65,58 @@ export const useBasketStore = defineStore('basket', () => {
   }
 
   async function addToCart(product: Product) {
-    loading.value = true
     error.value = null
-    try {
-      // 1. Clonar los items actuales
-      const newItems = [...cart.value.items]
-      
-      // 2. Revisar si ya existe el producto
-      const existingItemIndex = newItems.findIndex(i => i.productId === product.id)
-      if (existingItemIndex > -1) {
-        newItems[existingItemIndex].quantity += 1
-      } else {
-        newItems.push({
-          productId: product.id,
-          productName: product.name,
-          price: product.price,
-          color: 'default',
-          quantity: 1,
-          imageFiles: product.imageFiles // Guardamos para la UI temporalmente (aunque no sea parte estricta del backend)
-        })
+
+    // 1. Actualizar el estado local de inmediato (optimista) para que la UI
+    //    responda aunque el backend esté caído o tarde en contestar.
+    const newItems = [...cart.value.items]
+    const existingItemIndex = newItems.findIndex(i => i.productId === product.id)
+    if (existingItemIndex > -1) {
+      newItems[existingItemIndex] = {
+        ...newItems[existingItemIndex],
+        quantity: newItems[existingItemIndex].quantity + 1
       }
-
-      // 3. Crear el payload
-      const payload = {
-        cart: {
-          userName: cart.value.userName,
-          items: newItems
-        }
-      }
-
-      // 4. Enviar a backend
-      await storeBasket(payload)
-      
-      // 5. Reflejar en el estado local
-      cart.value.items = newItems
-
-    } catch (e: any) {
-      error.value = 'Hubo un error al agregar al carrito'
-      console.error(e)
-    } finally {
-      loading.value = false
+    } else {
+      newItems.push({
+        productId: product.id,
+        productName: product.name,
+        price: product.price,
+        color: 'default',
+        quantity: 1,
+        imageFiles: product.imageFiles
+      })
     }
+    cart.value = { ...cart.value, items: newItems }
+    console.log('[basketStore] Producto agregado localmente:', product.name)
+
+    // 2. Intentar reflejarlo en el backend, sin bloquear ni revertir la UI si falla.
+    loading.value = true
+    await syncCart()
+    loading.value = false
   }
 
   async function removeFromCart(productId: string) {
-    loading.value = true
     error.value = null
-    try {
-      const newItems = cart.value.items.filter(i => i.productId !== productId)
-      
-      const payload = {
-        cart: {
-          userName: cart.value.userName,
-          items: newItems
-        }
-      }
 
-      await storeBasket(payload)
-      cart.value.items = newItems
-    } catch (e: any) {
-      error.value = 'Hubo un error al eliminar el producto'
-      console.error(e)
-    } finally {
-      loading.value = false
-    }
+    const newItems = cart.value.items.filter(i => i.productId !== productId)
+    cart.value = { ...cart.value, items: newItems }
+    console.log('[basketStore] Producto eliminado localmente:', productId)
+
+    loading.value = true
+    await syncCart()
+    loading.value = false
   }
 
   async function emptyCart() {
-    loading.value = true
     error.value = null
+    cart.value = { ...cart.value, items: [] }
+
+    loading.value = true
     try {
       await deleteBasket(cart.value.userName)
-      cart.value.items = []
     } catch (e: any) {
-      error.value = 'Hubo un error al vaciar el carrito'
-      console.error(e)
+      console.error('[basketStore] No se pudo vaciar el carrito en el servidor:', e)
+      error.value = 'No se pudo vaciar el carrito en el servidor. Se vació localmente.'
     } finally {
       loading.value = false
     }

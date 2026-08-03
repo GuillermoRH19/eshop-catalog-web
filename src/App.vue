@@ -153,48 +153,9 @@
     </main>
 
     <!-- ═══════════════════════════════════════
-         CART DROPDOWN (mini)
+         CART VIEW (full drawer)
     ════════════════════════════════════════ -->
-    <Transition name="slide-up">
-      <div v-if="showCart" class="cart-dropdown" v-click-outside="() => (showCart = false)">
-        <div class="cart-header">
-          <span class="cart-title">Mi Carrito</span>
-          <button class="cart-close" @click="showCart = false">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        </div>
-
-        <div v-if="basketStore.cartItems.length === 0" class="cart-empty">
-          <OrbLoader size="sm" color="cyan" label="Tu carrito está vacío." />
-        </div>
-
-        <ul v-else class="cart-list">
-          <li v-for="item in basketStore.cartItems" :key="item.productId" class="cart-item">
-            <div class="cart-item-img">
-              <img v-if="item.imageFiles" :src="item.imageFiles" :alt="item.productName" @error="(e) => ((e.target as HTMLImageElement).style.display='none')" />
-              <span v-else>📦</span>
-            </div>
-            <div class="cart-item-info">
-              <p class="cart-item-name">{{ item.productName }} <span v-if="item.quantity > 1">x{{ item.quantity }}</span></p>
-              <p class="cart-item-price">${{ (item.price * item.quantity).toFixed(2) }}</p>
-            </div>
-            <button class="cart-item-remove" @click="basketStore.removeFromCart(item.productId)" aria-label="Quitar">✕</button>
-          </li>
-        </ul>
-
-        <div v-if="basketStore.cartItems.length > 0" class="cart-footer">
-          <div class="cart-total">
-            Total: <strong>${{ basketStore.cartTotal.toFixed(2) }}</strong>
-          </div>
-          <div style="display: flex; gap: 0.5rem; justify-content: space-between;">
-            <button class="btn-checkout" style="background: rgba(239, 68, 68, 0.1); color: var(--red-neon); border: 1px solid rgba(239, 68, 68, 0.3);" @click="basketStore.emptyCart()">Vaciar</button>
-            <button class="btn-checkout" style="flex:1;">Proceder al pago →</button>
-          </div>
-        </div>
-      </div>
-    </Transition>
+    <CartView v-model:open="showCart" />
 
     <!-- ═══════════════════════════════════════
          PRODUCT FORM MODAL (Drawer)
@@ -212,6 +173,7 @@ import BackgroundMesh from './components/BackgroundMesh.vue'
 import SearchBar from './components/SearchBar.vue'
 import ProductList from './components/ProductList.vue'
 import ProductFormModal from './components/ProductFormModal.vue'
+import CartView from './components/CartView.vue'
 import OrbLoader from './components/OrbLoader.vue'
 import { getProducts, deleteProductByName } from './api/productApi'
 import type { Product } from './api/productApi'
@@ -254,23 +216,6 @@ const filteredProducts = computed(() => {
 
   return list
 })
-
-// ── Click-outside directive (WeakMap — type-safe) ──
-const _coHandlers = new WeakMap<HTMLElement, (e: MouseEvent) => void>()
-const vClickOutside = {
-  mounted(el: HTMLElement, binding: any) {
-    const handler = (e: MouseEvent) => {
-      if (!el.contains(e.target as Node)) binding.value(e)
-    }
-    _coHandlers.set(el, handler)
-    document.addEventListener('click', handler)
-  },
-  unmounted(el: HTMLElement) {
-    const handler = _coHandlers.get(el)
-    if (handler) document.removeEventListener('click', handler)
-    _coHandlers.delete(el)
-  }
-}
 
 // ── API functions ──
 async function loadProducts() {
@@ -700,151 +645,6 @@ onMounted(() => {
   padding: 0;
 }
 .error-close:hover { opacity: 1; }
-
-/* ═══════════════════════════════════════
-   CART DROPDOWN
-════════════════════════════════════════ */
-.cart-dropdown {
-  position: fixed;
-  top: 70px;
-  right: 1.5rem;
-  z-index: 150;
-  width: 320px;
-  max-height: 480px;
-  background: rgba(12, 12, 22, 0.97);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  backdrop-filter: blur(24px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(108,99,255,0.08);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.cart-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.15rem 0.75rem;
-  border-bottom: 1px solid var(--glass-border);
-}
-
-.cart-title {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.cart-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px; height: 26px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.cart-close:hover { background: rgba(239,68,68,0.15); color: var(--red-neon); }
-
-.cart-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2.5rem 1rem;
-}
-
-.cart-list {
-  list-style: none;
-  overflow-y: auto;
-  flex: 1;
-  padding: 0.5rem 0;
-  max-height: 260px;
-}
-.cart-list::-webkit-scrollbar { width: 4px; }
-.cart-list::-webkit-scrollbar-thumb { background: rgba(108,99,255,0.25); border-radius: 999px; }
-
-.cart-item {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.6rem 1.15rem;
-  transition: background 0.15s;
-}
-.cart-item:hover { background: rgba(255,255,255,0.03); }
-
-.cart-item-img {
-  width: 36px; height: 36px;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  background: rgba(108,99,255,0.12);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-.cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
-
-.cart-item-info { flex: 1; min-width: 0; }
-.cart-item-name {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0;
-}
-.cart-item-price {
-  font-size: 0.75rem;
-  color: var(--green-neon);
-  font-weight: 700;
-  margin: 0;
-}
-
-.cart-item-remove {
-  background: none;
-  border: none;
-  color: var(--text-faint);
-  cursor: pointer;
-  font-size: 0.72rem;
-  line-height: 1;
-  padding: 2px 4px;
-  border-radius: 4px;
-  transition: background 0.15s, color 0.15s;
-}
-.cart-item-remove:hover { background: rgba(239,68,68,0.15); color: var(--red-neon); }
-
-.cart-footer {
-  padding: 0.85rem 1.15rem;
-  border-top: 1px solid var(--glass-border);
-}
-
-.cart-total {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 0.65rem;
-}
-.cart-total strong { color: var(--text-primary); font-size: 1rem; font-weight: 800; }
-
-.btn-checkout {
-  width: 100%;
-  padding: 0.6rem;
-  border: none;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--purple), var(--cyan));
-  color: #fff;
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 12px rgba(108,99,255,0.25);
-}
-.btn-checkout:hover { opacity: 0.88; box-shadow: var(--glow-purple); }
 
 /* ═══════════════════════════════════════
    TRANSITIONS
