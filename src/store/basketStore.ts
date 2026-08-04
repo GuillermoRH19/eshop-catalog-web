@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { getBasket, storeBasket, deleteBasket, type ShoppingCart } from '../api/basketApi'
 import type { Product } from '../api/productApi'
 
@@ -14,15 +14,36 @@ function getOrCreateUserName(): string {
   return userName
 }
 
+const CART_STORAGE_KEY = 'eshop_cart'
+
+// Cachea el carrito en localStorage para que sobreviva a un reload de página
+// aunque Basket.API esté lento o caído (ver fetchBasket/syncCart).
+function loadCartFromStorage(userName: string): ShoppingCart {
+  try {
+    const raw = localStorage.getItem(CART_STORAGE_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw) as ShoppingCart
+      if (parsed.userName === userName) return parsed
+    }
+  } catch (e) {
+    console.error('[basketStore] No se pudo leer el carrito de localStorage:', e)
+  }
+  return { userName, items: [] }
+}
+
+function saveCartToStorage(cart: ShoppingCart) {
+  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart))
+}
+
 export const useBasketStore = defineStore('basket', () => {
   // State
-  const cart = ref<ShoppingCart>({
-    userName: getOrCreateUserName(),
-    items: []
-  })
+  const cart = ref<ShoppingCart>(loadCartFromStorage(getOrCreateUserName()))
 
   const loading = ref(false)
   const error = ref<string | null>(null)
+
+  // Mantiene localStorage al día con cualquier cambio del carrito (local u obtenido del backend).
+  watch(cart, (newCart) => saveCartToStorage(newCart), { deep: true })
 
   // Getters
   const cartItems = computed(() => cart.value.items)
