@@ -31,9 +31,6 @@
               </button>
             </div>
 
-            <!-- Sync error banner -->
-            <div v-if="basketStore.error" class="sync-error">{{ basketStore.error }}</div>
-
             <!-- Body -->
             <div class="drawer-body">
               <div v-if="basketStore.loading && basketStore.cartItems.length === 0" class="cart-state">
@@ -205,18 +202,6 @@ watch(() => props.open, (val) => {
   background: rgba(239, 68, 68, 0.12);
   border-color: rgba(239, 68, 68, 0.3);
   color: var(--red-neon);
-}
-
-.sync-error {
-  margin: 1rem 1.75rem 0;
-  padding: 0.6rem 0.75rem;
-  border-radius: var(--radius-md);
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: var(--red-neon);
-  font-size: 0.76rem;
-  line-height: 1.4;
-  flex-shrink: 0;
 }
 
 .drawer-body {
