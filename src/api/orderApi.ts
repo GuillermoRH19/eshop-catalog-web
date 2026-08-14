@@ -65,5 +65,9 @@ export const getOrderById = (id: string) => http.get<Order>(`/api/orders/${id}`)
 export const getOrdersByCustomer = (customerId: string) =>
   http.get<{ orders: Order[] }>(`/api/orders/customer/${customerId}`)
 
+// Vista admin: todas las órdenes de todos los clientes.
+export const getAllOrders = () =>
+  http.get<{ orders: Order[] }>('/api/orders')
+
 // URL directa al comprobante en PDF (se usa en un <a href> normal, no hace falta pasar por axios).
 export const getOrderPdfUrl = (id: string) => `${API_BASE}/api/orders/${id}/pdf`

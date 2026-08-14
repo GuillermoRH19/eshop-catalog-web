@@ -18,7 +18,16 @@ export interface Customer {
   isNew: boolean
 }
 
+export interface CustomerListItem {
+  name: string
+  createdAt: string
+}
+
 // Crea el usuario en la base de datos si no existía, o lo reconoce si ya existía. No es login:
 // no hay contraseña, el nombre es el identificador único de Basket y Orders.
 export const switchUser = (name: string) =>
   http.post<Customer>('/customers', { name })
+
+// Lista de usuarios ya registrados, para elegir uno en el modal de "Cambiar usuario".
+export const getCustomers = () =>
+  http.get<{ customers: CustomerListItem[] }>('/customers')

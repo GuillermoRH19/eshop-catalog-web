@@ -49,6 +49,9 @@ export const useBasketStore = defineStore('basket', () => {
 
   // Getters
   const userName = computed(() => cart.value.userName)
+  // Sin login real: "admin" es solo un nombre de usuario que el frontend trata distinto
+  // (ve todas las órdenes en vez de solo las propias).
+  const isAdmin = computed(() => userName.value.trim().toLowerCase() === 'admin')
   const cartItems = computed(() => cart.value.items)
   const cartTotal = computed(() => cart.value.items.reduce((total, item) => total + (item.price * item.quantity), 0))
   const itemsCount = computed(() => cart.value.items.reduce((count, item) => count + item.quantity, 0))
@@ -166,6 +169,7 @@ export const useBasketStore = defineStore('basket', () => {
   return {
     cart,
     userName,
+    isAdmin,
     loading,
     error,
     cartItems,
