@@ -26,12 +26,12 @@ interface Orb {
 }
 
 const ORBS: Orb[] = [
-  { x: 0.15, y: 0.2,  vx: 0.00018, vy: 0.00012,  r: 0.38, darkColor: 'rgba(108,99,255,0.28)',  lightColor: 'rgba(108,99,255,0.12)' },
-  { x: 0.80, y: 0.75, vx: -0.00014, vy: 0.00010, r: 0.42, darkColor: 'rgba(139,92,246,0.22)',  lightColor: 'rgba(139,92,246,0.10)' },
-  { x: 0.5,  y: 0.5,  vx: 0.00010, vy: -0.00016, r: 0.30, darkColor: 'rgba(6,182,212,0.18)',   lightColor: 'rgba(6,182,212,0.09)'  },
-  { x: 0.85, y: 0.15, vx: -0.00012, vy: 0.00020, r: 0.28, darkColor: 'rgba(217,70,239,0.16)',  lightColor: 'rgba(217,70,239,0.08)' },
-  { x: 0.1,  y: 0.85, vx: 0.00020, vy: -0.00010, r: 0.25, darkColor: 'rgba(79,70,229,0.20)',   lightColor: 'rgba(79,70,229,0.10)'  },
-  { x: 0.6,  y: 0.1,  vx: -0.00008, vy: 0.00018, r: 0.32, darkColor: 'rgba(6,182,212,0.14)',   lightColor: 'rgba(6,182,212,0.07)'  },
+  { x: 0.15, y: 0.2,  vx: 0.00018, vy: 0.00012,  r: 0.38, darkColor: 'rgba(34, 197, 94,0.28)',  lightColor: 'rgba(34, 197, 94,0.12)' },
+  { x: 0.80, y: 0.75, vx: -0.00014, vy: 0.00010, r: 0.42, darkColor: 'rgba(74, 222, 128,0.22)',  lightColor: 'rgba(74, 222, 128,0.10)' },
+  { x: 0.5,  y: 0.5,  vx: 0.00010, vy: -0.00016, r: 0.30, darkColor: 'rgba(45, 212, 191,0.18)',   lightColor: 'rgba(45, 212, 191,0.09)'  },
+  { x: 0.85, y: 0.15, vx: -0.00012, vy: 0.00020, r: 0.28, darkColor: 'rgba(163,230,53,0.16)',  lightColor: 'rgba(163,230,53,0.08)' },
+  { x: 0.1,  y: 0.85, vx: 0.00020, vy: -0.00010, r: 0.25, darkColor: 'rgba(22, 163, 74,0.20)',   lightColor: 'rgba(22, 163, 74,0.10)'  },
+  { x: 0.6,  y: 0.1,  vx: -0.00008, vy: 0.00018, r: 0.32, darkColor: 'rgba(45, 212, 191,0.14)',   lightColor: 'rgba(45, 212, 191,0.07)'  },
 ]
 
 function isDark() {
@@ -48,7 +48,7 @@ function draw(canvas: HTMLCanvasElement) {
   ctx.clearRect(0, 0, w, h)
 
   // Background adapts to theme
-  ctx.fillStyle = isDark() ? '#0a0a0f' : '#f1f5fb'
+  ctx.fillStyle = isDark() ? '#16211b' : '#f1f5fb'
   ctx.fillRect(0, 0, w, h)
 
   time += 0.5

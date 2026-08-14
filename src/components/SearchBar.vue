@@ -77,9 +77,9 @@ function clear() {
 }
 
 .search-wrapper.focused {
-  border-color: rgba(108, 99, 255, 0.5);
-  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12), var(--glow-purple);
-  background: rgba(15, 15, 28, 0.85);
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12), var(--glow-purple);
+  background: rgba(22, 33, 27, 0.85);
 }
 
 .search-icon {

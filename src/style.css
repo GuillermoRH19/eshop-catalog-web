@@ -7,33 +7,33 @@
 
 /* ── Design Tokens (Dark Theme - Default) ── */
 :root, html.dark {
-  /* Colors — deep slate-purple instead of near-black: same premium feel, less "off" switch */
-  --bg-deep:      #14141f;
+  /* Colors — dark forest green-slate instead of near-black: readable but still clearly "dark" */
+  --bg-deep:      #16211b;
   --bg-surface:   rgba(255, 255, 255, 0.055);
   --bg-elevated:  rgba(255, 255, 255, 0.09);
 
-  --glass-bg:     rgba(24, 24, 38, 0.75);
+  --glass-bg:     rgba(24, 36, 29, 0.75);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-border-hover: rgba(255, 255, 255, 0.18);
 
-  --purple:       #7c72ff;
-  --purple-dark:  #5b52f0;
-  --violet:       #a78bfa;
-  --cyan:         #22d3ee;
+  --purple:       #22c55e;
+  --purple-dark:  #16a34a;
+  --violet:       #4ade80;
+  --cyan:         #2dd4bf;
   --green-neon:   #34d399;
   --red-neon:     #f87171;
   --amber:        #fbbf24;
 
-  --text-primary: #eef1f8;
-  --text-muted:   rgba(238, 241, 248, 0.62);
-  --text-faint:   rgba(238, 241, 248, 0.38);
+  --text-primary: #eef4f0;
+  --text-muted:   rgba(238, 244, 240, 0.62);
+  --text-faint:   rgba(238, 244, 240, 0.38);
 
   /* Overlay behind drawers/modals: tuned per theme so it dims for focus without killing contrast */
-  --modal-backdrop: rgba(4, 4, 10, 0.6);
+  --modal-backdrop: rgba(4, 10, 7, 0.6);
 
   /* Glow shadows */
-  --glow-purple:  0 0 20px rgba(124, 114, 255, 0.4), 0 0 60px rgba(124, 114, 255, 0.15);
-  --glow-cyan:    0 0 20px rgba(34, 211, 238, 0.4),  0 0 60px rgba(34, 211, 238, 0.15);
+  --glow-purple:  0 0 20px rgba(34, 197, 94, 0.4), 0 0 60px rgba(34, 197, 94, 0.15);
+  --glow-cyan:    0 0 20px rgba(45, 212, 191, 0.4),  0 0 60px rgba(45, 212, 191, 0.15);
   --glow-green:   0 0 20px rgba(52, 211, 153, 0.4), 0 0 60px rgba(52, 211, 153, 0.15);
 
   /* Border radius */
@@ -115,15 +115,15 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(108, 99, 255, 0.3);
+  background: color-mix(in srgb, var(--purple) 30%, transparent);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(108, 99, 255, 0.5);
+  background: color-mix(in srgb, var(--purple) 50%, transparent);
 }
 
 /* ── Selection ── */
 ::selection {
-  background: rgba(108, 99, 255, 0.35);
+  background: color-mix(in srgb, var(--purple) 35%, transparent);
   color: #fff;
 }

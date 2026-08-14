@@ -320,7 +320,7 @@ onMounted(() => {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(10, 10, 15, 0.75);
+  background: rgba(22, 33, 27, 0.75);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--glass-border);
@@ -407,8 +407,8 @@ onMounted(() => {
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .user-btn:hover {
-  background: rgba(108, 99, 255, 0.15);
-  border-color: rgba(108, 99, 255, 0.35);
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.35);
   color: var(--purple);
 }
 .user-btn svg { flex-shrink: 0; }
@@ -477,10 +477,10 @@ onMounted(() => {
   transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .cart-btn:hover {
-  background: rgba(108, 99, 255, 0.15);
-  border-color: rgba(108, 99, 255, 0.35);
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.35);
   color: var(--purple);
-  box-shadow: 0 0 12px rgba(108, 99, 255, 0.2);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.2);
 }
 
 .cart-badge {
@@ -498,7 +498,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 8px rgba(108, 99, 255, 0.6);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
   border: 1.5px solid var(--bg-deep);
 }
 
@@ -518,11 +518,11 @@ onMounted(() => {
   cursor: pointer;
   letter-spacing: 0.01em;
   transition: opacity 0.2s, box-shadow 0.25s, transform 0.12s;
-  box-shadow: 0 4px 14px rgba(108, 99, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
   white-space: nowrap;
 }
 .btn-add:hover {
-  box-shadow: var(--glow-purple), 0 4px 14px rgba(108, 99, 255, 0.4);
+  box-shadow: var(--glow-purple), 0 4px 14px rgba(34, 197, 94, 0.4);
   opacity: 0.9;
 }
 .btn-add:active { transform: scale(0.97); }
@@ -532,7 +532,7 @@ onMounted(() => {
 ════════════════════════════════════════ */
 .hero {
   border-bottom: 1px solid var(--glass-border);
-  background: linear-gradient(180deg, rgba(108,99,255,0.04) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(34, 197, 94,0.04) 0%, transparent 100%);
 }
 
 .hero-inner {
@@ -561,8 +561,8 @@ onMounted(() => {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--purple);
-  background: rgba(108, 99, 255, 0.1);
-  border: 1px solid rgba(108, 99, 255, 0.25);
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.25);
   padding: 0.3rem 0.8rem;
   border-radius: 999px;
   margin-bottom: 1.25rem;
@@ -620,10 +620,10 @@ onMounted(() => {
   font-weight: 700;
   cursor: pointer;
   transition: box-shadow 0.3s, transform 0.12s;
-  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.35);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
 }
 .btn-hero-cta:hover {
-  box-shadow: var(--glow-purple), var(--glow-cyan), 0 8px 30px rgba(108,99,255,0.5);
+  box-shadow: var(--glow-purple), var(--glow-cyan), 0 8px 30px rgba(34, 197, 94,0.5);
   transform: translateY(-1px);
 }
 .btn-hero-cta:active { transform: translateY(0) scale(0.98); }
@@ -668,16 +668,16 @@ onMounted(() => {
 }
 
 .cat-pill:hover {
-  background: rgba(108, 99, 255, 0.12);
-  border-color: rgba(108, 99, 255, 0.3);
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
   color: var(--purple);
 }
 
 .cat-pill.active {
-  background: linear-gradient(135deg, rgba(108,99,255,0.25), rgba(6,182,212,0.15));
-  border-color: rgba(108, 99, 255, 0.45);
+  background: linear-gradient(135deg, rgba(34, 197, 94,0.25), rgba(45, 212, 191,0.15));
+  border-color: rgba(34, 197, 94, 0.45);
   color: var(--purple-dark);
-  box-shadow: 0 0 12px rgba(108, 99, 255, 0.2);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.2);
 }
 
 /* ── Global Error ── */

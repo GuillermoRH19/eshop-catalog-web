@@ -34,17 +34,17 @@ withDefaults(defineProps<{
 
 /* ── Color tokens ── */
 .orb--purple {
-  --c1: #6c63ff;
-  --c2: #8b5cf6;
-  --c3: rgba(108,99,255,0.35);
-  --c-glow: rgba(108,99,255,0.5);
-  --c-shine: rgba(196,181,253,0.6);
+  --c1: #22c55e;
+  --c2: #4ade80;
+  --c3: rgba(34, 197, 94,0.35);
+  --c-glow: rgba(34, 197, 94,0.5);
+  --c-shine: rgba(187,247,208,0.6);
 }
 .orb--cyan {
-  --c1: #06b6d4;
+  --c1: #2dd4bf;
   --c2: #0891b2;
-  --c3: rgba(6,182,212,0.35);
-  --c-glow: rgba(6,182,212,0.5);
+  --c3: rgba(45, 212, 191,0.35);
+  --c-glow: rgba(45, 212, 191,0.5);
   --c-shine: rgba(103,232,249,0.6);
 }
 .orb--amber {
@@ -84,7 +84,7 @@ withDefaults(defineProps<{
   background:
     radial-gradient(circle at 32% 28%, var(--c-shine) 0%, transparent 45%),
     radial-gradient(circle at 68% 75%, rgba(0,0,0,0.6) 0%, transparent 50%),
-    radial-gradient(circle at center, var(--c1) 0%, var(--c2) 60%, #0a0a0f 100%);
+    radial-gradient(circle at center, var(--c1) 0%, var(--c2) 60%, var(--bg-deep) 100%);
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.07),
     inset 0 2px 8px rgba(255,255,255,0.12),

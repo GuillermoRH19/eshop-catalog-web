@@ -230,7 +230,7 @@ watch(() => props.open, (val) => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6), -1px 0 0 rgba(108, 99, 255, 0.12);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6), -1px 0 0 rgba(34, 197, 94, 0.12);
 }
 
 .drawer-header {
@@ -306,7 +306,7 @@ watch(() => props.open, (val) => {
 
 .drawer-body::-webkit-scrollbar { width: 5px; }
 .drawer-body::-webkit-scrollbar-track { background: transparent; }
-.drawer-body::-webkit-scrollbar-thumb { background: rgba(108, 99, 255, 0.25); border-radius: 999px; }
+.drawer-body::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.25); border-radius: 999px; }
 
 .cart-state {
   display: flex;
@@ -330,8 +330,8 @@ watch(() => props.open, (val) => {
   transition: background 0.2s, border-color 0.2s;
 }
 .btn-continue:hover {
-  background: rgba(108, 99, 255, 0.12);
-  border-color: rgba(108, 99, 255, 0.3);
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
 }
 
 /* ── Order confirmation ── */
@@ -424,8 +424,8 @@ watch(() => props.open, (val) => {
   gap: 0.4rem;
   padding: 0.55rem 1.25rem;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(108, 99, 255, 0.35);
-  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.1);
   color: var(--purple);
   font-family: inherit;
   font-size: 0.84rem;
@@ -435,8 +435,8 @@ watch(() => props.open, (val) => {
   transition: background 0.2s, border-color 0.2s;
 }
 .btn-pdf:hover {
-  background: rgba(108, 99, 255, 0.18);
-  border-color: rgba(108, 99, 255, 0.5);
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.5);
 }
 
 .checkout-error {
@@ -472,7 +472,7 @@ watch(() => props.open, (val) => {
   height: 56px;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  background: rgba(108, 99, 255, 0.12);
+  background: rgba(34, 197, 94, 0.12);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -571,7 +571,7 @@ watch(() => props.open, (val) => {
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
 }
 .btn-checkout:hover { opacity: 0.9; box-shadow: var(--glow-purple); }
 

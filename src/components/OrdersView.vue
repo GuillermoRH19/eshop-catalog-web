@@ -158,7 +158,7 @@ watch(() => props.open, (val) => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6), -1px 0 0 rgba(108, 99, 255, 0.12);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6), -1px 0 0 rgba(34, 197, 94, 0.12);
 }
 
 .drawer-header {
@@ -224,7 +224,7 @@ watch(() => props.open, (val) => {
 }
 .drawer-body::-webkit-scrollbar { width: 5px; }
 .drawer-body::-webkit-scrollbar-track { background: transparent; }
-.drawer-body::-webkit-scrollbar-thumb { background: rgba(108, 99, 255, 0.25); border-radius: 999px; }
+.drawer-body::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.25); border-radius: 999px; }
 
 .orders-state {
   display: flex;
@@ -248,8 +248,8 @@ watch(() => props.open, (val) => {
   transition: background 0.2s, border-color 0.2s;
 }
 .btn-retry:hover {
-  background: rgba(108, 99, 255, 0.12);
-  border-color: rgba(108, 99, 255, 0.3);
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
 }
 
 .order-list {
@@ -325,8 +325,8 @@ watch(() => props.open, (val) => {
 .btn-pdf-sm {
   padding: 0.35rem 0.75rem;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(108, 99, 255, 0.35);
-  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.1);
   color: var(--purple);
   font-size: 0.74rem;
   font-weight: 700;
@@ -334,8 +334,8 @@ watch(() => props.open, (val) => {
   transition: background 0.2s, border-color 0.2s;
 }
 .btn-pdf-sm:hover {
-  background: rgba(108, 99, 255, 0.18);
-  border-color: rgba(108, 99, 255, 0.5);
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.5);
 }
 
 /* Transitions */

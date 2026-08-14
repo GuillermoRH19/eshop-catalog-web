@@ -164,11 +164,11 @@ function onDelete() {
 }
 
 .product-card:hover {
-  border-color: rgba(108, 99, 255, 0.4);
+  border-color: rgba(34, 197, 94, 0.4);
   box-shadow:
-    0 0 0 1px rgba(108, 99, 255, 0.1),
+    0 0 0 1px rgba(34, 197, 94, 0.1),
     0 12px 40px rgba(0, 0, 0, 0.5),
-    0 0 25px rgba(108, 99, 255, 0.12);
+    0 0 25px rgba(34, 197, 94, 0.12);
   transform: translateY(-4px);
 }
 
@@ -201,8 +201,8 @@ function onDelete() {
 }
 
 .admin-trigger:hover {
-  background: rgba(108, 99, 255, 0.2);
-  border-color: rgba(108, 99, 255, 0.4);
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
   color: var(--purple);
 }
 
@@ -246,7 +246,7 @@ function onDelete() {
   height: 200px;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-surface);
   flex-shrink: 0;
 }
 
@@ -266,7 +266,7 @@ function onDelete() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(108,99,255,0.07), rgba(6,182,212,0.05));
+  background: linear-gradient(135deg, rgba(34, 197, 94,0.07), rgba(45, 212, 191,0.05));
 }
 
 .img-overlay {
@@ -316,11 +316,11 @@ function onDelete() {
   border-radius: 999px;
   letter-spacing: 0.03em;
 }
-.cat-hue-0 { background: rgba(108,99,255,0.18); border: 1px solid rgba(108,99,255,0.3); color: #a5b4fc; }
-.cat-hue-1 { background: rgba(6,182,212,0.15);  border: 1px solid rgba(6,182,212,0.28);  color: #67e8f9; }
+.cat-hue-0 { background: rgba(34, 197, 94,0.18); border: 1px solid rgba(34, 197, 94,0.3); color: #86efac; }
+.cat-hue-1 { background: rgba(45, 212, 191,0.15);  border: 1px solid rgba(45, 212, 191,0.28);  color: #67e8f9; }
 .cat-hue-2 { background: rgba(217,70,239,0.15); border: 1px solid rgba(217,70,239,0.28); color: #e879f9; }
 .cat-hue-3 { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.28); color: #fcd34d; }
-.cat-more  { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--text-muted); }
+.cat-more  { background: var(--bg-elevated); border: 1px solid var(--glass-border); color: var(--text-muted); }
 
 .card-name {
   font-size: 0.97rem;
@@ -369,7 +369,7 @@ function onDelete() {
   cursor: pointer;
   letter-spacing: 0.02em;
   transition: opacity 0.2s, box-shadow 0.3s, transform 0.12s;
-  box-shadow: 0 4px 14px rgba(108, 99, 255, 0.25);
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.25);
   position: relative;
   overflow: hidden;
 }
@@ -386,7 +386,7 @@ function onDelete() {
 .btn-cart:hover::before { opacity: 1; }
 
 .btn-cart:hover {
-  box-shadow: 0 0 0 2px rgba(108,99,255,0.3), 0 6px 24px rgba(108,99,255,0.4), var(--glow-cyan);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94,0.3), 0 6px 24px rgba(34, 197, 94,0.4), var(--glow-cyan);
 }
 
 .btn-cart:active { transform: scale(0.97); }

@@ -228,7 +228,7 @@ function reset() {
 
 .product-form:hover {
   border-color: var(--glass-border-hover);
-  box-shadow: 0 0 40px rgba(108, 99, 255, 0.06);
+  box-shadow: 0 0 40px rgba(34, 197, 94, 0.06);
 }
 
 /* ── Header ── */
@@ -311,13 +311,13 @@ label {
 }
 
 .input-wrap:focus-within {
-  border-color: rgba(108, 99, 255, 0.55);
-  background: rgba(108, 99, 255, 0.05);
-  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12), inset 0 0 0 1px rgba(108, 99, 255, 0.2);
+  border-color: rgba(34, 197, 94, 0.55);
+  background: rgba(34, 197, 94, 0.05);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12), inset 0 0 0 1px rgba(34, 197, 94, 0.2);
 }
 
 .input-wrap.input-active {
-  border-color: rgba(108, 99, 255, 0.25);
+  border-color: rgba(34, 197, 94, 0.25);
 }
 
 /* ── Inputs / Textarea ── */
@@ -406,11 +406,11 @@ input[type="number"]::-webkit-outer-spin-button {
   background: linear-gradient(135deg, var(--purple) 0%, var(--violet) 100%);
   color: #fff;
   min-width: 155px;
-  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  box-shadow: var(--glow-purple), 0 4px 15px rgba(108, 99, 255, 0.4);
+  box-shadow: var(--glow-purple), 0 4px 15px rgba(34, 197, 94, 0.4);
   opacity: 0.92;
 }
 

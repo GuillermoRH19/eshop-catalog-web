@@ -169,7 +169,7 @@ watch(() => props.open, (val) => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6), -1px 0 0 rgba(108, 99, 255, 0.12);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6), -1px 0 0 rgba(34, 197, 94, 0.12);
 }
 
 .drawer-header {
@@ -236,7 +236,7 @@ watch(() => props.open, (val) => {
 }
 .drawer-body::-webkit-scrollbar { width: 5px; }
 .drawer-body::-webkit-scrollbar-track { background: transparent; }
-.drawer-body::-webkit-scrollbar-thumb { background: rgba(108, 99, 255, 0.25); border-radius: 999px; }
+.drawer-body::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.25); border-radius: 999px; }
 
 .field-label {
   display: block;
@@ -260,7 +260,7 @@ watch(() => props.open, (val) => {
   outline: none;
   transition: border-color 0.2s;
 }
-.user-input:focus { border-color: rgba(108, 99, 255, 0.5); }
+.user-input:focus { border-color: rgba(34, 197, 94, 0.5); }
 .user-input:disabled { opacity: 0.6; }
 
 .btn-use {
@@ -332,8 +332,8 @@ watch(() => props.open, (val) => {
   transition: background 0.15s, border-color 0.15s;
 }
 .customer-item:hover:not(:disabled) {
-  background: rgba(108, 99, 255, 0.1);
-  border-color: rgba(108, 99, 255, 0.3);
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
 }
 .customer-item:disabled { cursor: not-allowed; opacity: 0.7; }
 

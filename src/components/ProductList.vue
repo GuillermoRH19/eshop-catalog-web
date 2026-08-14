@@ -73,8 +73,8 @@ const emit = defineEmits<{
   font-weight: 600;
   padding: 0.22rem 0.7rem;
   border-radius: 999px;
-  background: rgba(108, 99, 255, 0.15);
-  border: 1px solid rgba(108, 99, 255, 0.25);
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.25);
   color: #a5b4fc;
 }
 

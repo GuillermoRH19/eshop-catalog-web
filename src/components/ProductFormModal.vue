@@ -91,7 +91,7 @@ watch(() => props.open, (val) => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6), -1px 0 0 rgba(108, 99, 255, 0.12);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.6), -1px 0 0 rgba(34, 197, 94, 0.12);
 }
 
 /* ── Header ── */
@@ -189,7 +189,7 @@ watch(() => props.open, (val) => {
 /* Scrollbar inside drawer */
 .drawer-body::-webkit-scrollbar { width: 5px; }
 .drawer-body::-webkit-scrollbar-track { background: transparent; }
-.drawer-body::-webkit-scrollbar-thumb { background: rgba(108, 99, 255, 0.25); border-radius: 999px; }
+.drawer-body::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.25); border-radius: 999px; }
 
 /* ── Transitions ── */
 /* Backdrop fade */
