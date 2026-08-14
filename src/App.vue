@@ -135,15 +135,34 @@
     ════════════════════════════════════════ -->
     <main class="main" ref="catalogRef">
 
-      <!-- Category filter pills -->
-      <div v-if="allCategories.length > 0" class="category-bar">
-        <button
-          v-for="cat in ['Todos', ...allCategories]"
-          :key="cat"
-          class="cat-pill"
-          :class="{ active: activeCategory === cat }"
-          @click="activeCategory = cat"
-        >{{ cat }}</button>
+      <!-- Catalog toolbar: filtro de categoría a la izquierda, conteo + orden a la derecha -->
+      <div class="catalog-toolbar">
+        <div v-if="allCategories.length > 0" class="category-bar">
+          <button
+            v-for="cat in ['Todos', ...allCategories]"
+            :key="cat"
+            class="cat-pill"
+            :class="{ active: activeCategory === cat }"
+            @click="activeCategory = cat"
+          >{{ cat }}</button>
+        </div>
+
+        <div class="toolbar-right">
+          <span class="product-count">
+            {{ filteredProducts.length }} producto{{ filteredProducts.length !== 1 ? 's' : '' }}
+          </span>
+          <div class="sort-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18M6 12h12M10 18h4"/>
+            </svg>
+            <select v-model="sortBy" class="sort-select" aria-label="Ordenar productos">
+              <option value="name-asc">Nombre A-Z</option>
+              <option value="name-desc">Nombre Z-A</option>
+              <option value="price-asc">Precio: menor a mayor</option>
+              <option value="price-desc">Precio: mayor a menor</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <!-- Product Grid -->
@@ -221,6 +240,7 @@ const showCart       = ref(false)
 const showOrders     = ref(false)
 const showUserModal  = ref(false)
 const activeCategory = ref('Todos')
+const sortBy         = ref<'name-asc' | 'name-desc' | 'price-asc' | 'price-desc'>('name-asc')
 const catalogRef     = ref<HTMLElement | null>(null)
 
 // ── Derived data ──
@@ -243,6 +263,16 @@ const filteredProducts = computed(() => {
     const q = searchQuery.value.toLowerCase()
     list = list.filter(p => p.name.toLowerCase().includes(q))
   }
+
+  // Orden — copia para no mutar el array original al usar .sort()
+  list = [...list].sort((a, b) => {
+    switch (sortBy.value) {
+      case 'name-desc':  return b.name.localeCompare(a.name)
+      case 'price-asc':  return a.price - b.price
+      case 'price-desc': return b.price - a.price
+      default:            return a.name.localeCompare(b.name) // name-asc
+    }
+  })
 
   return list
 })
@@ -643,12 +673,70 @@ onMounted(() => {
   padding: 2.5rem 1.75rem 5rem;
 }
 
+/* ── Catalog toolbar ── */
+.catalog-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.product-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.22rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: var(--purple);
+  white-space: nowrap;
+}
+
+.sort-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+}
+
+.sort-select {
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  padding-right: 0.1rem;
+}
+.sort-select option {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+}
+
 /* ── Category Pills ── */
 .category-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 .cat-pill {

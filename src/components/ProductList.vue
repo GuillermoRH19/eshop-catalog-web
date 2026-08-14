@@ -13,12 +13,6 @@
 
     <!-- ── Grid ── -->
     <template v-else>
-      <div class="list-meta">
-        <span class="product-count">
-          {{ products.length }} producto{{ products.length !== 1 ? 's' : '' }}
-        </span>
-      </div>
-
       <div class="cards-grid">
         <ProductCard
           v-for="(product, index) in products"
@@ -59,23 +53,6 @@ const emit = defineEmits<{
   align-items: center;
   justify-content: center;
   padding: 5rem 2rem;
-}
-
-/* Meta row */
-.list-meta {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.25rem;
-}
-
-.product-count {
-  font-size: 0.78rem;
-  font-weight: 600;
-  padding: 0.22rem 0.7rem;
-  border-radius: 999px;
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.25);
-  color: #a5b4fc;
 }
 
 /* Responsive grid */
