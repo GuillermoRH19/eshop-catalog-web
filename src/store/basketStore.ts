@@ -1,15 +1,17 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import { getBasket, storeBasket, deleteBasket, type ShoppingCart } from '../api/basketApi'
+import { switchUser as switchUserApi } from '../api/customerApi'
 import type { Product } from '../api/productApi'
+
+const USERNAME_STORAGE_KEY = 'eshop_username'
 
 // Identifica el carrito del visitante entre sesiones (Basket.API indexa por userName).
 function getOrCreateUserName(): string {
-  const STORAGE_KEY = 'eshop_username'
-  let userName = localStorage.getItem(STORAGE_KEY)
+  let userName = localStorage.getItem(USERNAME_STORAGE_KEY)
   if (!userName) {
     userName = `guest-${crypto.randomUUID()}`
-    localStorage.setItem(STORAGE_KEY, userName)
+    localStorage.setItem(USERNAME_STORAGE_KEY, userName)
   }
   return userName
 }
@@ -46,6 +48,7 @@ export const useBasketStore = defineStore('basket', () => {
   watch(cart, (newCart) => saveCartToStorage(newCart), { deep: true })
 
   // Getters
+  const userName = computed(() => cart.value.userName)
   const cartItems = computed(() => cart.value.items)
   const cartTotal = computed(() => cart.value.items.reduce((total, item) => total + (item.price * item.quantity), 0))
   const itemsCount = computed(() => cart.value.items.reduce((count, item) => count + item.quantity, 0))
@@ -143,8 +146,26 @@ export const useBasketStore = defineStore('basket', () => {
     }
   }
 
+  // Cambia el "usuario" activo (sin login: solo un nombre). Lo registra/reconoce en Basket.API
+  // (se guarda en Postgres) y, recién si eso funciona, mueve el carrito local a ese nombre y
+  // trae su carrito real del backend. Si falla, no se cambia nada — el nombre nuevo debe quedar
+  // confirmado en la base de datos antes de usarse como identificador de Basket/Orders.
+  async function switchUser(name: string) {
+    const trimmed = name.trim()
+    if (!trimmed || trimmed === cart.value.userName) return
+
+    const response = await switchUserApi(trimmed)
+    const confirmedName = response.data.name
+
+    localStorage.setItem(USERNAME_STORAGE_KEY, confirmedName)
+    error.value = null
+    cart.value = { userName: confirmedName, items: [] }
+    await fetchBasket()
+  }
+
   return {
     cart,
+    userName,
     loading,
     error,
     cartItems,
@@ -153,6 +174,7 @@ export const useBasketStore = defineStore('basket', () => {
     fetchBasket,
     addToCart,
     removeFromCart,
-    emptyCart
+    emptyCart,
+    switchUser
   }
 })

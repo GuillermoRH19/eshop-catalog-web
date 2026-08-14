@@ -28,6 +28,30 @@
 
         <!-- Actions (right) -->
         <div class="navbar-actions">
+          <!-- User switcher: no hay login, solo un nombre que se guarda en BD (Basket.API) -->
+          <div class="user-switcher">
+            <form v-if="editingUser" class="user-form" @submit.prevent="confirmUserSwitch">
+              <input
+                ref="userInputRef"
+                v-model="userNameDraft"
+                class="user-input"
+                type="text"
+                placeholder="Nombre de usuario"
+                maxlength="60"
+                :disabled="switchingUser"
+                @keyup.esc="cancelUserSwitch"
+                @blur="cancelUserSwitch"
+              />
+              <span v-if="userSwitchError" class="user-switch-error">{{ userSwitchError }}</span>
+            </form>
+            <button v-else class="user-btn" @click="startEditingUser">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span class="user-btn-label">Cambiar usuario: <strong>{{ basketStore.userName }}</strong></span>
+            </button>
+          </div>
+
           <!-- API badge -->
           <span class="api-badge">
             <span class="live-orb">
@@ -168,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import BackgroundMesh from './components/BackgroundMesh.vue'
 import SearchBar from './components/SearchBar.vue'
 import ProductList from './components/ProductList.vue'
@@ -192,6 +216,13 @@ const showModal      = ref(false)
 const showCart       = ref(false)
 const activeCategory = ref('Todos')
 const catalogRef     = ref<HTMLElement | null>(null)
+
+// ── User switcher ──
+const editingUser     = ref(false)
+const switchingUser   = ref(false)
+const userNameDraft   = ref('')
+const userSwitchError = ref('')
+const userInputRef    = ref<HTMLInputElement | null>(null)
 
 // ── Derived data ──
 const allCategories = computed(() => {
@@ -239,6 +270,43 @@ async function onDelete(id: string) {
   } catch (err: any) {
     globalError.value = 'Error al eliminar el producto.'
     console.error(err)
+  }
+}
+
+// ── User switcher ──
+function startEditingUser() {
+  userNameDraft.value = basketStore.userName
+  userSwitchError.value = ''
+  editingUser.value = true
+  nextTick(() => userInputRef.value?.focus())
+}
+
+function cancelUserSwitch() {
+  // Al deshabilitar el input (mientras se guarda) el navegador le quita el foco solo, lo que
+  // dispara @blur — sin este guard, eso cerraría el formulario justo cuando confirmUserSwitch
+  // sigue en curso.
+  if (switchingUser.value) return
+  editingUser.value = false
+  userSwitchError.value = ''
+}
+
+async function confirmUserSwitch() {
+  const name = userNameDraft.value.trim()
+  if (!name || name === basketStore.userName) {
+    cancelUserSwitch()
+    return
+  }
+
+  switchingUser.value = true
+  userSwitchError.value = ''
+  try {
+    await basketStore.switchUser(name)
+    editingUser.value = false
+  } catch (err: any) {
+    console.error('[App] No se pudo cambiar de usuario:', err)
+    userSwitchError.value = 'No se pudo guardar el usuario. Intenta de nuevo.'
+  } finally {
+    switchingUser.value = false
   }
 }
 
@@ -357,6 +425,72 @@ onMounted(() => {
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
+}
+
+/* User switcher */
+.user-switcher {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: var(--bg-surface);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  max-width: 220px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.user-btn:hover {
+  background: rgba(108, 99, 255, 0.15);
+  border-color: rgba(108, 99, 255, 0.35);
+  color: var(--purple);
+}
+.user-btn svg { flex-shrink: 0; }
+.user-btn-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.user-btn-label strong { color: var(--text-primary); font-weight: 700; }
+.user-btn:hover .user-btn-label strong { color: var(--purple); }
+
+.user-form { position: relative; }
+
+.user-input {
+  width: 190px;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: var(--bg-surface);
+  border: 1px solid rgba(108, 99, 255, 0.45);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.8rem;
+  outline: none;
+}
+.user-input:disabled { opacity: 0.6; }
+
+.user-switch-error {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  color: var(--red-neon);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.6rem;
+  z-index: 10;
 }
 
 /* API badge */

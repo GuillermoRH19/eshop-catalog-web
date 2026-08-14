@@ -1,0 +1,69 @@
+import axios from 'axios'
+
+const API_BASE = import.meta.env.VITE_ORDERS_API_URL || 'http://localhost:5272'
+
+const http = axios.create({
+  baseURL: API_BASE,
+  timeout: 15000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+http.interceptors.request.use((config) => {
+  console.log(`[ordersApi] → ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`, config.data ?? '')
+  return config
+})
+
+http.interceptors.response.use(
+  (response) => {
+    console.log(`[ordersApi] ← ${response.status} ${response.config.url}`, response.data)
+    return response
+  },
+  (error) => {
+    if (error.code === 'ECONNABORTED') {
+      console.error(`[ordersApi] ✕ Timeout esperando respuesta de ${error.config?.url}`)
+    } else if (error.response) {
+      console.error(`[ordersApi] ✕ ${error.response.status} ${error.config?.url}`, error.response.data)
+    } else {
+      console.error(`[ordersApi] ✕ Sin respuesta del servidor (${error.config?.url}). ¿Orders.API está caído?`, error.message)
+    }
+    return Promise.reject(error)
+  }
+)
+
+export interface OrderItem {
+  productId: string
+  productName: string
+  quantity: number
+  unitPrice: number
+  lineTotal: number
+}
+
+export interface Order {
+  id: string
+  customerId: string
+  createdAt: string
+  status: 'Pending' | 'Confirmed' | 'Cancelled'
+  items: OrderItem[]
+  subtotal: number
+  tax: number
+  total: number
+}
+
+// Genera una orden a partir del Basket del cliente. El Idempotency-Key evita duplicar la orden
+// si el request se reintenta (doble clic, retry de red, etc).
+export const createOrder = (customerId: string, idempotencyKey: string) =>
+  http.post<Order>(
+    '/api/orders',
+    { customerId },
+    { headers: { 'Idempotency-Key': idempotencyKey } }
+  )
+
+export const getOrderById = (id: string) => http.get<Order>(`/api/orders/${id}`)
+
+export const getOrdersByCustomer = (customerId: string) =>
+  http.get<{ orders: Order[] }>(`/api/orders/customer/${customerId}`)
+
+// URL directa al comprobante en PDF (se usa en un <a href> normal, no hace falta pasar por axios).
+export const getOrderPdfUrl = (id: string) => `${API_BASE}/api/orders/${id}/pdf`
