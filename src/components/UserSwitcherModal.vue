@@ -151,7 +151,7 @@ watch(() => props.open, (val) => {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--modal-backdrop);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   display: flex;
@@ -162,7 +162,9 @@ watch(() => props.open, (val) => {
   width: 100%;
   max-width: 400px;
   height: 100%;
-  background: rgba(12, 12, 22, 0.96);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-left: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
@@ -197,7 +199,7 @@ watch(() => props.open, (val) => {
 .drawer-title {
   font-size: 1.05rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #c4b5fd, var(--cyan));
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -214,8 +216,8 @@ watch(() => props.open, (val) => {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
   color: var(--text-muted);
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
@@ -320,7 +322,7 @@ watch(() => props.open, (val) => {
   gap: 0.7rem;
   padding: 0.6rem 0.75rem;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-surface);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
   font-family: inherit;

@@ -40,11 +40,13 @@ export interface OrderItem {
   lineTotal: number
 }
 
+export type OrderStatus = 'Pending' | 'Confirmed' | 'Cancelled'
+
 export interface Order {
   id: string
   customerId: string
   createdAt: string
-  status: 'Pending' | 'Confirmed' | 'Cancelled'
+  status: OrderStatus
   items: OrderItem[]
   subtotal: number
   tax: number
@@ -68,6 +70,11 @@ export const getOrdersByCustomer = (customerId: string) =>
 // Vista admin: todas las órdenes de todos los clientes.
 export const getAllOrders = () =>
   http.get<{ orders: Order[] }>('/api/orders')
+
+// Transiciones permitidas por el backend: Pending -> Confirmed, Pending -> Cancelled.
+// Cualquier otra combinación responde 400/409 (ver OrderStatusActions.vue).
+export const updateOrderStatus = (id: string, status: 'Confirmed' | 'Cancelled') =>
+  http.patch<Order>(`/api/orders/${id}/status`, { status })
 
 // URL directa al comprobante en PDF (se usa en un <a href> normal, no hace falta pasar por axios).
 export const getOrderPdfUrl = (id: string) => `${API_BASE}/api/orders/${id}/pdf`

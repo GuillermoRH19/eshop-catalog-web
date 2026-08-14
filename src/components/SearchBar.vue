@@ -110,8 +110,8 @@ function clear() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
   border-radius: 6px;
   cursor: pointer;
   color: var(--text-muted);

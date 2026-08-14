@@ -256,7 +256,7 @@ function reset() {
 .form-title {
   font-size: 1.1rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #c4b5fd, var(--cyan));
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -305,8 +305,8 @@ label {
 .input-wrap {
   position: relative;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  background: var(--bg-surface);
   transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
 }
 
@@ -416,15 +416,15 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* Secondary — ghost */
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-elevated);
   color: var(--text-muted);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-elevated);
   color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: var(--glass-border-hover);
 }
 
 /* ── Message badges ── */

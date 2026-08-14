@@ -52,9 +52,7 @@
                       <p class="order-id">#{{ order.id.slice(0, 8) }}</p>
                       <p class="order-date">{{ formatDate(order.createdAt) }}</p>
                     </div>
-                    <span class="status-badge" :class="`status-${order.status.toLowerCase()}`">
-                      {{ statusLabel(order.status) }}
-                    </span>
+                    <OrderStatusBadge :status="order.status" />
                   </div>
 
                   <p v-if="basketStore.isAdmin" class="order-customer">Cliente: <strong>{{ order.customerId }}</strong></p>
@@ -71,6 +69,13 @@
                       PDF
                     </a>
                   </div>
+
+                  <OrderStatusActions
+                    class="order-status-actions"
+                    :order-id="order.id"
+                    :status="order.status"
+                    @update:status="s => order.status = s"
+                  />
                 </li>
               </ul>
             </div>
@@ -84,6 +89,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import OrbLoader from './OrbLoader.vue'
+import OrderStatusBadge from './OrderStatusBadge.vue'
+import OrderStatusActions from './OrderStatusActions.vue'
 import { useBasketStore } from '../store/basketStore'
 import { getOrdersByCustomer, getAllOrders, getOrderPdfUrl, type Order } from '../api/orderApi'
 
@@ -118,15 +125,6 @@ async function loadOrders() {
   }
 }
 
-function statusLabel(status: Order['status']): string {
-  switch (status) {
-    case 'Pending': return 'Pendiente'
-    case 'Confirmed': return 'Confirmada'
-    case 'Cancelled': return 'Cancelada'
-    default: return status
-  }
-}
-
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' })
 }
@@ -142,7 +140,7 @@ watch(() => props.open, (val) => {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--modal-backdrop);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   display: flex;
@@ -153,7 +151,9 @@ watch(() => props.open, (val) => {
   width: 100%;
   max-width: 440px;
   height: 100%;
-  background: rgba(12, 12, 22, 0.96);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-left: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
@@ -188,7 +188,7 @@ watch(() => props.open, (val) => {
 .drawer-title {
   font-size: 1.05rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #c4b5fd, var(--cyan));
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -204,8 +204,8 @@ watch(() => props.open, (val) => {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
   color: var(--text-muted);
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
@@ -239,7 +239,7 @@ watch(() => props.open, (val) => {
   padding: 0.55rem 1.25rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-surface);
   color: var(--text-primary);
   font-family: inherit;
   font-size: 0.84rem;
@@ -264,7 +264,7 @@ watch(() => props.open, (val) => {
 .order-card {
   padding: 0.9rem 1rem;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-surface);
   border: 1px solid var(--glass-border);
 }
 
@@ -297,32 +297,6 @@ watch(() => props.open, (val) => {
 }
 .order-customer strong { color: var(--text-primary); }
 
-.status-badge {
-  flex-shrink: 0;
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-}
-.status-pending {
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  color: #f59e0b;
-}
-.status-confirmed {
-  background: rgba(52, 211, 153, 0.1);
-  border: 1px solid rgba(52, 211, 153, 0.3);
-  color: var(--green-neon);
-}
-.status-cancelled {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: var(--red-neon);
-}
-
 .order-items {
   list-style: none;
   padding: 0;
@@ -345,6 +319,8 @@ watch(() => props.open, (val) => {
 }
 
 .order-total { font-size: 0.95rem; color: var(--text-primary); font-weight: 800; }
+
+.order-status-actions { margin-top: 0.65rem; }
 
 .btn-pdf-sm {
   padding: 0.35rem 0.75rem;

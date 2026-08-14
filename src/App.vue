@@ -85,8 +85,8 @@
             </Transition>
           </button>
 
-          <!-- Add product button -->
-          <button class="btn-add" @click="showModal = true">
+          <!-- Add product button: solo visible para el usuario "admin" -->
+          <button v-if="basketStore.isAdmin" class="btn-add" @click="showModal = true">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               stroke-width="2.5" stroke-linecap="round">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -656,8 +656,8 @@ onMounted(() => {
   align-items: center;
   padding: 0.4rem 1rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  background: var(--bg-surface);
   color: var(--text-muted);
   font-family: inherit;
   font-size: 0.82rem;
@@ -670,13 +670,13 @@ onMounted(() => {
 .cat-pill:hover {
   background: rgba(108, 99, 255, 0.12);
   border-color: rgba(108, 99, 255, 0.3);
-  color: #c4b5fd;
+  color: var(--purple);
 }
 
 .cat-pill.active {
   background: linear-gradient(135deg, rgba(108,99,255,0.25), rgba(6,182,212,0.15));
   border-color: rgba(108, 99, 255, 0.45);
-  color: #e0d9ff;
+  color: var(--purple-dark);
   box-shadow: 0 0 12px rgba(108, 99, 255, 0.2);
 }
 

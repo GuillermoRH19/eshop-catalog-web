@@ -7,30 +7,33 @@
 
 /* ── Design Tokens (Dark Theme - Default) ── */
 :root, html.dark {
-  /* Colors */
-  --bg-deep:      #0a0a0f;
-  --bg-surface:   rgba(255, 255, 255, 0.04);
-  --bg-elevated:  rgba(255, 255, 255, 0.07);
+  /* Colors — deep slate-purple instead of near-black: same premium feel, less "off" switch */
+  --bg-deep:      #14141f;
+  --bg-surface:   rgba(255, 255, 255, 0.055);
+  --bg-elevated:  rgba(255, 255, 255, 0.09);
 
-  --glass-bg:     rgba(15, 15, 28, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-border-hover: rgba(255, 255, 255, 0.16);
+  --glass-bg:     rgba(24, 24, 38, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-hover: rgba(255, 255, 255, 0.18);
 
-  --purple:       #6c63ff;
-  --purple-dark:  #4f46e5;
-  --violet:       #8b5cf6;
-  --cyan:         #06b6d4;
+  --purple:       #7c72ff;
+  --purple-dark:  #5b52f0;
+  --violet:       #a78bfa;
+  --cyan:         #22d3ee;
   --green-neon:   #34d399;
   --red-neon:     #f87171;
-  --amber:        #f59e0b;
+  --amber:        #fbbf24;
 
-  --text-primary: #e2e8f0;
-  --text-muted:   rgba(226, 232, 240, 0.5);
-  --text-faint:   rgba(226, 232, 240, 0.3);
+  --text-primary: #eef1f8;
+  --text-muted:   rgba(238, 241, 248, 0.62);
+  --text-faint:   rgba(238, 241, 248, 0.38);
+
+  /* Overlay behind drawers/modals: tuned per theme so it dims for focus without killing contrast */
+  --modal-backdrop: rgba(4, 4, 10, 0.6);
 
   /* Glow shadows */
-  --glow-purple:  0 0 20px rgba(108, 99, 255, 0.4), 0 0 60px rgba(108, 99, 255, 0.15);
-  --glow-cyan:    0 0 20px rgba(6, 182, 212, 0.4),  0 0 60px rgba(6, 182, 212, 0.15);
+  --glow-purple:  0 0 20px rgba(124, 114, 255, 0.4), 0 0 60px rgba(124, 114, 255, 0.15);
+  --glow-cyan:    0 0 20px rgba(34, 211, 238, 0.4),  0 0 60px rgba(34, 211, 238, 0.15);
   --glow-green:   0 0 20px rgba(52, 211, 153, 0.4), 0 0 60px rgba(52, 211, 153, 0.15);
 
   /* Border radius */
@@ -51,27 +54,32 @@
 
 /* ── Light Theme ── */
 html.light {
-  --bg-deep:      #f8fafc;
-  --bg-surface:   rgba(0, 0, 0, 0.04);
-  --bg-elevated:  rgba(0, 0, 0, 0.07);
+  --bg-deep:      #f5f6fb;
+  --bg-surface:   rgba(15, 23, 42, 0.045);
+  --bg-elevated:  rgba(15, 23, 42, 0.08);
 
   --glass-bg:     rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(0, 0, 0, 0.1);
-  --glass-border-hover: rgba(0, 0, 0, 0.16);
+  --glass-border: rgba(15, 23, 42, 0.12);
+  --glass-border-hover: rgba(15, 23, 42, 0.2);
 
-  --purple:       #4f46e5;
+  --purple:       #5b52f0;
   --purple-dark:  #4338ca;
   --violet:       #7c3aed;
   --cyan:         #0891b2;
   --green-neon:   #059669;
   --red-neon:     #dc2626;
-  --amber:        #d97706;
+  --amber:        #b45309;
 
-  --text-primary: #0f172a;
-  --text-muted:   rgba(15, 23, 42, 0.65);
-  --text-faint:   rgba(15, 23, 42, 0.4);
+  --text-primary: #10182b;
+  --text-muted:   rgba(16, 24, 43, 0.68);
+  --text-faint:   rgba(16, 24, 43, 0.44);
 
-  --glow-purple:  0 0 15px rgba(79, 70, 229, 0.3), 0 0 40px rgba(79, 70, 229, 0.1);
+  /* Navy-tinted, low-opacity: a black 0.6 overlay (dark theme's value) turns light backgrounds
+     into a muddy grey that dark text can't sit on top of — this dims for focus without wrecking
+     contrast. */
+  --modal-backdrop: rgba(30, 41, 59, 0.32);
+
+  --glow-purple:  0 0 15px rgba(91, 82, 240, 0.3), 0 0 40px rgba(91, 82, 240, 0.1);
   --glow-cyan:    0 0 15px rgba(8, 145, 178, 0.3),  0 0 40px rgba(8, 145, 178, 0.1);
   --glow-green:   0 0 15px rgba(5, 150, 105, 0.3), 0 0 40px rgba(5, 150, 105, 0.1);
 

@@ -203,7 +203,7 @@ function onDelete() {
 .admin-trigger:hover {
   background: rgba(108, 99, 255, 0.2);
   border-color: rgba(108, 99, 255, 0.4);
-  color: #c4b5fd;
+  color: var(--purple);
 }
 
 .admin-dropdown {

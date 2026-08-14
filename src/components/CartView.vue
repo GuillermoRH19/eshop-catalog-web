@@ -54,13 +54,20 @@
                   </div>
                   <div class="confirmation-row">
                     <dt>Estado</dt>
-                    <dd>{{ statusLabel(orderConfirmation.status) }}</dd>
+                    <dd><OrderStatusBadge :status="orderConfirmation.status" /></dd>
                   </div>
                   <div class="confirmation-row">
                     <dt>Total</dt>
                     <dd class="confirmation-total">${{ orderConfirmation.total.toFixed(2) }}</dd>
                   </div>
                 </dl>
+
+                <OrderStatusActions
+                  class="confirmation-status-actions"
+                  :order-id="orderConfirmation.id"
+                  :status="orderConfirmation.status"
+                  @update:status="s => orderConfirmation!.status = s"
+                />
 
                 <div class="confirmation-actions">
                   <a
@@ -145,6 +152,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import OrbLoader from './OrbLoader.vue'
+import OrderStatusBadge from './OrderStatusBadge.vue'
+import OrderStatusActions from './OrderStatusActions.vue'
 import { useBasketStore } from '../store/basketStore'
 import { createOrder, getOrderPdfUrl, type Order } from '../api/orderApi'
 
@@ -186,15 +195,6 @@ async function handleCheckout() {
   }
 }
 
-function statusLabel(status: Order['status']): string {
-  switch (status) {
-    case 'Pending': return 'Pendiente'
-    case 'Confirmed': return 'Confirmada'
-    case 'Cancelled': return 'Cancelada'
-    default: return status
-  }
-}
-
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleString('es-MX', {
     dateStyle: 'medium',
@@ -212,7 +212,7 @@ watch(() => props.open, (val) => {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--modal-backdrop);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   display: flex;
@@ -223,7 +223,9 @@ watch(() => props.open, (val) => {
   width: 100%;
   max-width: 420px;
   height: 100%;
-  background: rgba(12, 12, 22, 0.96);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-left: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
@@ -262,7 +264,7 @@ watch(() => props.open, (val) => {
 .drawer-title {
   font-size: 1.05rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #c4b5fd, var(--cyan));
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -282,8 +284,8 @@ watch(() => props.open, (val) => {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
   color: var(--text-muted);
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
@@ -319,7 +321,7 @@ watch(() => props.open, (val) => {
   padding: 0.55rem 1.25rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-surface);
   color: var(--text-primary);
   font-family: inherit;
   font-size: 0.84rem;
@@ -376,9 +378,14 @@ watch(() => props.open, (val) => {
   gap: 0.65rem;
   padding: 1rem 1.1rem;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-surface);
   border: 1px solid var(--glass-border);
-  margin: 0 0 1.75rem;
+  margin: 0 0 1.25rem;
+}
+
+.confirmation-status-actions {
+  width: 100%;
+  margin: 0 0 1.25rem;
 }
 
 .confirmation-row {
@@ -454,11 +461,11 @@ watch(() => props.open, (val) => {
   gap: 0.85rem;
   padding: 0.75rem;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-surface);
   border: 1px solid var(--glass-border);
   transition: background 0.15s;
 }
-.cart-item:hover { background: rgba(255, 255, 255, 0.05); }
+.cart-item:hover { background: var(--bg-elevated); }
 
 .cart-item-img {
   width: 56px;
