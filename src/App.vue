@@ -29,11 +29,12 @@
         <!-- Actions (right) -->
         <div class="navbar-actions">
           <!-- User switcher: no hay login, solo un nombre que se guarda en BD (Basket.API) -->
-          <button class="user-btn" @click="showUserModal = true">
+          <button class="user-btn" :class="{ 'user-btn-empty': !basketStore.hasUser }" @click="openUserModal()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
             </svg>
-            <span class="user-btn-label">Cambiar usuario: <strong>{{ basketStore.userName }}</strong></span>
+            <span v-if="basketStore.hasUser" class="user-btn-label">Cambiar usuario: <strong>{{ basketStore.userName }}</strong></span>
+            <span v-else class="user-btn-label">Elige un usuario</span>
           </button>
 
           <!-- Orders: propias, o todas si el usuario activo es "admin" -->
@@ -170,7 +171,8 @@
         :products="filteredProducts"
         :loading="loading"
         @delete="onDelete"
-        @add-to-cart="basketStore.addToCart"
+        @add-to-cart="handleAddToCart"
+        @need-user="promptForUser"
       />
 
       <!-- Global Error -->
@@ -190,7 +192,7 @@
     <!-- ═══════════════════════════════════════
          CART VIEW (full drawer)
     ════════════════════════════════════════ -->
-    <CartView v-model:open="showCart" />
+    <CartView v-model:open="showCart" @need-user="promptForUser" />
 
     <!-- ═══════════════════════════════════════
          ORDERS VIEW (propias, o todas si admin)
@@ -200,7 +202,7 @@
     <!-- ═══════════════════════════════════════
          USER SWITCHER MODAL
     ════════════════════════════════════════ -->
-    <UserSwitcherModal v-model:open="showUserModal" />
+    <UserSwitcherModal v-model:open="showUserModal" :notice="userModalNotice" />
 
     <!-- ═══════════════════════════════════════
          PRODUCT FORM MODAL (Drawer)
@@ -239,6 +241,7 @@ const showModal      = ref(false)
 const showCart       = ref(false)
 const showOrders     = ref(false)
 const showUserModal  = ref(false)
+const userModalNotice = ref('')
 const activeCategory = ref('Todos')
 const sortBy         = ref<'name-asc' | 'name-desc' | 'price-asc' | 'price-desc'>('name-asc')
 const catalogRef     = ref<HTMLElement | null>(null)
@@ -300,6 +303,23 @@ async function onDelete(id: string) {
     globalError.value = 'Error al eliminar el producto.'
     console.error(err)
   }
+}
+
+// ── User switcher ──
+function openUserModal() {
+  userModalNotice.value = ''
+  showUserModal.value = true
+}
+
+function promptForUser() {
+  userModalNotice.value = 'Elige o crea un usuario para agregar productos al carrito.'
+  showUserModal.value = true
+}
+
+function handleAddToCart(product: Product) {
+  // ProductCard ya revisa basketStore.hasUser y emite 'need-user' en vez de esto si no hay
+  // usuario activo — este handler solo se llama cuando sí hay uno.
+  basketStore.addToCart(product)
 }
 
 // ── Misc ──
@@ -449,6 +469,17 @@ onMounted(() => {
 }
 .user-btn-label strong { color: var(--text-primary); font-weight: 700; }
 .user-btn:hover .user-btn-label strong { color: var(--purple); }
+
+.user-btn-empty {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: var(--amber);
+}
+.user-btn-empty:hover {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.5);
+  color: var(--amber);
+}
 
 /* API badge */
 .api-badge {

@@ -21,6 +21,7 @@
           :delay="`${index * 55}ms`"
           @add-to-cart="(p) => emit('add-to-cart', p)"
           @delete="(id) => emit('delete', id)"
+          @need-user="emit('need-user')"
         />
       </div>
     </template>
@@ -40,6 +41,7 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'delete', id: string): void
   (e: 'add-to-cart', product: Product): void
+  (e: 'need-user'): void
 }>()
 </script>
 

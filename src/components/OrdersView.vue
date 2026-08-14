@@ -32,7 +32,11 @@
 
             <!-- Body -->
             <div class="drawer-body">
-              <div v-if="loading" class="orders-state">
+              <div v-if="!basketStore.hasUser" class="orders-state">
+                <OrbLoader size="md" color="amber" label="Elige un usuario para ver órdenes." />
+              </div>
+
+              <div v-else-if="loading" class="orders-state">
                 <OrbLoader size="md" color="purple" label="Cargando órdenes..." />
               </div>
 
@@ -49,7 +53,7 @@
                 <li v-for="order in orders" :key="order.id" class="order-card">
                   <div class="order-card-header">
                     <div>
-                      <p class="order-id">#{{ order.id.slice(0, 8) }}</p>
+                      <p class="order-id">{{ order.orderNumber }}</p>
                       <p class="order-date">{{ formatDate(order.createdAt) }}</p>
                     </div>
                     <OrderStatusBadge :status="order.status" />
@@ -110,6 +114,8 @@ function close() {
 }
 
 async function loadOrders() {
+  if (!basketStore.hasUser) return
+
   loading.value = true
   loadError.value = false
   try {

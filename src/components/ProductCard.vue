@@ -94,6 +94,9 @@
 import { ref } from 'vue'
 import type { Product } from '../api/productApi'
 import OrbLoader from './OrbLoader.vue'
+import { useBasketStore } from '../store/basketStore'
+
+const basketStore = useBasketStore()
 
 const props = defineProps<{
   product: Product
@@ -103,6 +106,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'add-to-cart', product: Product): void
   (e: 'delete', id: string): void
+  (e: 'need-user'): void
 }>()
 
 // ── State ──
@@ -130,6 +134,10 @@ const vClickOutside = {
 }
 
 function onAddToCart() {
+  if (!basketStore.hasUser) {
+    emit('need-user')
+    return
+  }
   emit('add-to-cart', props.product)
   justAdded.value = true
   setTimeout(() => { justAdded.value = false }, 1800)

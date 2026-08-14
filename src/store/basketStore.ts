@@ -6,14 +6,12 @@ import type { Product } from '../api/productApi'
 
 const USERNAME_STORAGE_KEY = 'eshop_username'
 
-// Identifica el carrito del visitante entre sesiones (Basket.API indexa por userName).
-function getOrCreateUserName(): string {
-  let userName = localStorage.getItem(USERNAME_STORAGE_KEY)
-  if (!userName) {
-    userName = `guest-${crypto.randomUUID()}`
-    localStorage.setItem(USERNAME_STORAGE_KEY, userName)
-  }
-  return userName
+// A propósito NO se auto-genera un "guest-<uuid>": la app arranca sin usuario activo hasta que
+// alguien elige uno explícitamente desde "Cambiar usuario" (ver UserSwitcherModal). Así "admin"
+// nunca es el default de nadie por accidente, y cada carrito/orden queda ligado a un nombre que
+// alguien realmente eligió.
+function getStoredUserName(): string {
+  return localStorage.getItem(USERNAME_STORAGE_KEY) ?? ''
 }
 
 const CART_STORAGE_KEY = 'eshop_cart'
@@ -39,7 +37,7 @@ function saveCartToStorage(cart: ShoppingCart) {
 
 export const useBasketStore = defineStore('basket', () => {
   // State
-  const cart = ref<ShoppingCart>(loadCartFromStorage(getOrCreateUserName()))
+  const cart = ref<ShoppingCart>(loadCartFromStorage(getStoredUserName()))
 
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -49,6 +47,7 @@ export const useBasketStore = defineStore('basket', () => {
 
   // Getters
   const userName = computed(() => cart.value.userName)
+  const hasUser = computed(() => userName.value.trim().length > 0)
   // Sin login real: "admin" es solo un nombre de usuario que el frontend trata distinto
   // (ve todas las órdenes en vez de solo las propias).
   const isAdmin = computed(() => userName.value.trim().toLowerCase() === 'admin')
@@ -71,6 +70,8 @@ export const useBasketStore = defineStore('basket', () => {
 
   // Actions
   async function fetchBasket() {
+    if (!hasUser.value) return
+
     loading.value = true
     error.value = null
     try {
@@ -92,6 +93,11 @@ export const useBasketStore = defineStore('basket', () => {
   }
 
   async function addToCart(product: Product) {
+    // Defensa extra: la UI ya intercepta esto antes de llamar (ver ProductCard/App.vue), pero
+    // si algo llegara a llamarlo sin usuario activo, mejor fallar claro que crear un carrito con
+    // userName vacío.
+    if (!hasUser.value) throw new Error('NO_USER')
+
     error.value = null
 
     // 1. Actualizar el estado local de inmediato (optimista) para que la UI
@@ -169,6 +175,7 @@ export const useBasketStore = defineStore('basket', () => {
   return {
     cart,
     userName,
+    hasUser,
     isAdmin,
     loading,
     error,

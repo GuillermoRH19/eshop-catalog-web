@@ -34,6 +34,9 @@ http.interceptors.response.use(
 
 export interface OrderItem {
   productId: string
+  // Código corto derivado del productId (últimos 8 hex, mayúsculas) — para mostrar, no para
+  // buscar: el productId completo sigue siendo la clave real.
+  productRef: string
   productName: string
   quantity: number
   unitPrice: number
@@ -44,6 +47,8 @@ export type OrderStatus = 'Pending' | 'Confirmed' | 'Cancelled'
 
 export interface Order {
   id: string
+  // "ORD-XXXXXXXX", derivado del id — lo que se le muestra a un humano en vez del GUID completo.
+  orderNumber: string
   customerId: string
   createdAt: string
   status: OrderStatus

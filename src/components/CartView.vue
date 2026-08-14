@@ -46,7 +46,7 @@
                 <dl class="confirmation-details">
                   <div class="confirmation-row">
                     <dt>Orden</dt>
-                    <dd class="confirmation-order-id">{{ orderConfirmation.id }}</dd>
+                    <dd class="confirmation-order-id">{{ orderConfirmation.orderNumber }}</dd>
                   </div>
                   <div class="confirmation-row">
                     <dt>Fecha</dt>
@@ -83,6 +83,11 @@
                   </a>
                   <button class="btn-continue" @click="close">Seguir comprando</button>
                 </div>
+              </div>
+
+              <div v-else-if="!basketStore.hasUser" class="cart-state">
+                <OrbLoader size="md" color="amber" label="Elige un usuario para ver tu carrito." />
+                <button class="btn-continue" @click="openUserModal">Elegir usuario</button>
               </div>
 
               <div v-else-if="basketStore.loading && basketStore.cartItems.length === 0" class="cart-state">
@@ -162,11 +167,17 @@ const basketStore = useBasketStore()
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{
   (e: 'update:open', val: boolean): void
+  (e: 'need-user'): void
 }>()
 
 const checkingOut = ref(false)
 const checkoutError = ref('')
 const orderConfirmation = ref<Order | null>(null)
+
+function openUserModal() {
+  close()
+  emit('need-user')
+}
 
 function close() {
   emit('update:open', false)

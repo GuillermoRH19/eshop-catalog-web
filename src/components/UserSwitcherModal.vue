@@ -16,7 +16,9 @@
                 </div>
                 <div>
                   <h2 class="drawer-title">Cambiar usuario</h2>
-                  <p class="drawer-subtitle">Activo: <strong>{{ basketStore.userName }}</strong></p>
+                  <p class="drawer-subtitle">
+                    Activo: <strong>{{ basketStore.hasUser ? basketStore.userName : 'Ninguno' }}</strong>
+                  </p>
                 </div>
               </div>
               <button class="close-btn" @click="close" aria-label="Cerrar">
@@ -29,6 +31,8 @@
 
             <!-- Body -->
             <div class="drawer-body">
+              <p v-if="notice" class="user-notice">{{ notice }}</p>
+
               <form class="new-user-form" @submit.prevent="handleSwitch(draftName)">
                 <label class="field-label" for="new-user-input">Nuevo usuario</label>
                 <div class="new-user-row">
@@ -88,7 +92,7 @@ import { getCustomers, type CustomerListItem } from '../api/customerApi'
 
 const basketStore = useBasketStore()
 
-const props = defineProps<{ open: boolean }>()
+const props = defineProps<{ open: boolean; notice?: string }>()
 const emit = defineEmits<{
   (e: 'update:open', val: boolean): void
 }>()
@@ -283,6 +287,17 @@ watch(() => props.open, (val) => {
   margin: 0.75rem 0 0;
   font-size: 0.78rem;
   color: var(--red-neon);
+}
+
+.user-notice {
+  margin: 0 0 1.25rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--amber);
+  font-size: 0.8rem;
+  line-height: 1.4;
 }
 
 .divider {
